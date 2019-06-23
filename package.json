@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "start:server": "shadow-cljs server",
+        "start:watch": "shadow-cljs watch app"
+    },
+    "devDependencies": {
+        "shadow-cljs": "^2.3.22"
+    }
+}
