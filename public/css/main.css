@@ -1,3 +1,19 @@
 body {
   color: green;
 }
+
+.token-container {
+    display: flex;
+    background: rgb(173, 235, 173);
+    padding: 10px;
+}
+
+.token-container>* {
+    margin: 0 5px;
+}
+
+.token {
+    padding: 5px 10px;
+    border: 1px solid black;
+    color: darkblue;
+}

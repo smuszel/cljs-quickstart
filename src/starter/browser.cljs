@@ -5,24 +5,62 @@
     (identity el)    
 )
 
-(defn addEl [tag]
-    (->> (.createElement js/document tag)
-        (setVal "")
+(defn handleClick [handler el]
+    (.addEventListener el "click" handler)
+    (identity el)    
+)
+
+(defn setClass [cls el]
+    (set! (.-className el) cls)
+    (identity el)
+)
+
+(defn createInput []
+    (.createElement js/document "input")
+)
+
+(defn append [elA elB]
+    (.appendChild elB elA)
+    (identity elB)
+)
+
+(defn enterHandle [inp cont]
+    (.addEventListener inp "keydown" (fn [ev] 
+        (if (= (.-key ev) "Enter") 
+            (.appendChild cont 
+                (let [$ (.createElement js/document "span")]
+                    (set! (.-textContent $) (.-value inp))
+                    (set! (.-value inp) "")
+                    (set! (.-className $) "token")
+                    (.addEventListener $ "click" #(.remove $))
+                    (.appendChild cont $)
+                )
+            )    
+            nil
+        )
+    ))
+    (identity cont)
+)
+
+(defn addContainer [inp]
+    (->> (.createElement js/document "div")
+        (setClass "token-container")
+        (handleClick #(.focus inp))
+        (append inp)
+        (enterHandle inp)
         (.appendChild js/document.body)
     )
 )
 
 ;; start is called by init and after code reloading finishes
-(defn ^:dev/after-load start []
-  (addEl "input"))
+(defn ^:dev/after-load start [])
 
 (defn ^:export init []
-  ;; init is called ONCE when the page loads
-  ;; this is called in the index.html and must be exported
-  ;; so it is available even in :advanced release builds
-  (js/console.log "init")
-  (start))
+    (addContainer (createInput))
+    (js/console.log "init")
+    (start)
+)
 
-;; this is called before any code is reloaded
 (defn ^:dev/before-load stop []
-  (js/console.log "stop"))
+    (js/console.log "stop")
+)
