@@ -1,15 +1,20 @@
 (ns starter.browser)
 
-(defn addEl [tag v]
-    (let [el (.createElement js/document tag)]
-        (set! (.-value el) v)
-        (.appendChild js/document.body el)
+(defn setVal [v el]
+    (set! (.-value el) v)
+    (identity el)    
+)
+
+(defn addEl [tag]
+    (->> (.createElement js/document tag)
+        (setVal "")
+        (.appendChild js/document.body)
     )
 )
 
 ;; start is called by init and after code reloading finishes
 (defn ^:dev/after-load start []
-  (addEl "input", "abc"))
+  (addEl "input"))
 
 (defn ^:export init []
   ;; init is called ONCE when the page loads
